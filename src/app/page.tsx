@@ -26,7 +26,6 @@ export default async function Home() {
                     category={product.category}
                     price={product.price}
                     imageUrl={product.image}
-                    // onAddToCart={handleAddToCart}
                   />
                 </Link>
               );

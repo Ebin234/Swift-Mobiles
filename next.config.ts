@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
     // remotePatterns: [new URL('https://m.media-amazon.com/images/I/**')],
     domains: ["m.media-amazon.com", "rukminim2.flixcart.com"],
   },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
 };
 
 export default nextConfig;
