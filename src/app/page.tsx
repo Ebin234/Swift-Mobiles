@@ -11,7 +11,7 @@ export default async function Home() {
 
   await connectDB();
   const products = await Product.find({});
-  console.log(products[0]._id);
+  console.log(products[0]?._id);
   return (
     <div>
       <NavBar />
@@ -23,6 +23,7 @@ export default async function Home() {
                 <Link href={product.productLink} key={product._id} target="_blank">
                   <ProductCard
                     name={product.name}
+                    category={product.category}
                     price={product.price}
                     imageUrl={product.image}
                     // onAddToCart={handleAddToCart}
