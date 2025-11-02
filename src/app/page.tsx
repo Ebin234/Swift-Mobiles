@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import NavBar from "@/components/navbar";
 import ProductCard from "@/components/productCard";
 import { connectDB } from "@/lib/mongodb";
