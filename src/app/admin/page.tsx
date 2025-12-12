@@ -4,11 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/product";
+import { deleteProduct } from "@/lib/actions/deleteProduct.action";
+import DeleteButton from "@/components/ui/DeleteButton";
+import { revalidatePath } from "next/cache";
 
 export default async function Admin() {
   await connectDB();
   const products = await Product.find({});
   console.log("prod", products[0]);
+
+  const handleDelete = async(id:string)=>{
+    "use server";
+    await deleteProduct(id);
+    revalidatePath("/admin");
+  }
+
   return (
     <div className="bg-white h-screen">
       <h1 className="flex justify-center items-center pt-8 pb-8 text-2xl text-black font-semibold">
@@ -36,10 +46,10 @@ export default async function Admin() {
           </thead>
           <tbody>
             {products.map((product) => (
-              <tr key={product.id} className="hover:bg-gray-50">
+              <tr key={product._id} className="hover:bg-gray-50">
                 <td className="py-3 px-4 border-b text-black">
                   <Image
-                    src={product.image}
+                    src={product.image.trim()}
                     alt={product.name}
                     width={64}
                     height={64}
@@ -64,9 +74,7 @@ export default async function Admin() {
                   <button className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-2">
                     Edit
                   </button>
-                  <button className="px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">
-                    Delete
-                  </button>
+                  <DeleteButton id={product._id.toString()} handleDelete={handleDelete} />
                 </td>
               </tr>
             ))}

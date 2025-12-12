@@ -2,14 +2,16 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  experimental: {
+    turbopackFileSystemCacheForDev: true,
+  },
   images: {
-    // remotePatterns: [new URL('https://m.media-amazon.com/images/I/**')],
-    domains: ["m.media-amazon.com", "rukminim2.flixcart.com"],
+    domains: ["m.media-amazon.com","rukminim1.flixcart.com", "rukminim2.flixcart.com"],
   },
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript:{
+  // eslint: {
+  //   ignoreDuringBuilds: true,
+  // },
+  typescript: {
     ignoreBuildErrors: true,
   },
 };
