@@ -14,7 +14,7 @@ type ProductCardData = {
 };
 
 export default function AddProductForm({
-  _id : id ,
+  _id: id,
   name,
   category,
   price,
@@ -22,7 +22,6 @@ export default function AddProductForm({
   productLink,
   edit,
 }: ProductCardData) {
-
   const [formData, setFormData] = useState({
     name: name ? name : "",
     category: category ? category : "Unboxed",
@@ -30,8 +29,9 @@ export default function AddProductForm({
     image: image ? image : "",
     productLink: productLink ? productLink : "",
   });
+  const [loading, setLoading] = useState<boolean>(false);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const handleChange = (
@@ -43,33 +43,44 @@ export default function AddProductForm({
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      console.log(e.target.files[0]);
+      setImageFile(e.target.files[0]);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      let res : Response;
-      if (edit) {
-        res = await fetch(`/api/products/edit/${id}`,{
-          method:"PUT",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        })
-      } else {
-        res = await fetch("/api/products", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(formData),
-        });
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("category", formData.category);
+      data.append("price", formData.price);
+      data.append("productLink", formData.productLink);
+      if (imageFile) {
+        data.append("image", imageFile);
       }
 
-      if (!res.ok) throw new Error(`Failed to ${edit ? `edit` : `add`} product`);
+      const res = await fetch(
+        edit ? `/api/products/edit/${id}` : "/api/products",
+        {
+          method: edit ? `PUT` : "POST",
+          // headers: { "Content-Type": "application/json" },
+          body: data,
+        }
+      );
 
-      const data = await res.json();
+      if (!res.ok)
+        throw new Error(`Failed to ${edit ? `edit` : `add`} product`);
+
+      const response = await res.json();
       alert(`✅ Product ${edit ? `edited` : `added`} successfully!`);
-      // console.log(data);
+      // console.log(response);
 
-      router.push('/admin');
+      router.push("/admin");
     } catch (err) {
       alert(`❌ Error ${edit ? `editing` : `adding`} product. Check console.`);
       console.error(err);
@@ -145,13 +156,14 @@ export default function AddProductForm({
 
           <div>
             <label className="block font-medium text-gray-700 mb-1">
-              Image URL
+              Image File
             </label>
             <input
-              type="text"
+              type="file"
               name="image"
-              value={formData.image}
-              onChange={handleChange}
+              accept="image/*"
+              // value={imageFile}
+              onChange={handleFileChange}
               placeholder="https://example.com/image.jpg"
               className="w-full border text-black border-gray-300 rounded-md px-4 py-2 focus:ring-2 focus:ring-blue-500 focus:outline-none"
             />
