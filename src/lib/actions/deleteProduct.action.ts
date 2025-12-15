@@ -1,5 +1,5 @@
-"use server"
-import mongoose from "mongoose"
+"use server";
+
 import Product from "@/models/product";
 import { connectDB } from "../mongodb";
 

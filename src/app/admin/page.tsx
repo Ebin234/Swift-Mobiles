@@ -71,9 +71,9 @@ export default async function Admin() {
                 </td>
                 {/* <td className="py-3 px-4 border-b text-black">2</td> */}
                 <td className="py-3 px-4 border-b text-center text-black">
-                  <button className="px-3 py-1 bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-2">
+                  <Link href={`/admin/edit-product/${product._id}`} className="px-[19px] py-[7px] bg-blue-600 text-white rounded-md hover:bg-blue-700 mr-2">
                     Edit
-                  </button>
+                  </Link>
                   <DeleteButton id={product._id.toString()} handleDelete={handleDelete} />
                 </td>
               </tr>
