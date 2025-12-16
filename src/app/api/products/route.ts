@@ -42,7 +42,9 @@ export async function POST(req: NextRequest) {
       price,
       productLink,
       image: (uploadResult as { secure_url: string }).secure_url,
+      imagePublicId: (uploadResult as { public_id: string }).public_id,
     });
+    console.log("created Product",product)
     return NextResponse.json({ success: true, product }, { status: 201 });
   } catch (error) {
     console.error(error);

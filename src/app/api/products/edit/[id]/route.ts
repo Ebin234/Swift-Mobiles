@@ -1,3 +1,4 @@
+import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/product";
 import { NextResponse } from "next/server";
@@ -16,20 +17,46 @@ export async function PUT(
       );
     }
 
-    const data = await req.json();
-
-    const updatedProduct = await Product.findByIdAndUpdate(id, data, {
-      returnDocument: "after",
-    }).lean();
-
-    if (!updatedProduct) {
+    const product = await Product.findById(id);
+    if (!product) {
       return NextResponse.json(
         { success: false, message: "Product not found" },
         { status: 404 }
       );
     }
+
+    const formData = await req.formData();
+
+    product.name = formData.get("name");
+    product.category = formData.get("category");
+    product.price = formData.get("price");
+    product.productLink = formData.get("productLink");
+
+    const image = formData.get("image") as File;
+
+    if (image) {
+      const arrayBuffer = await image.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const uploadResult = await new Promise((resolve, reject) => {
+        cloudinary.uploader
+          .upload_stream(
+            { resource_type: "image", folder: "products" },
+            (error, result) => {
+              if (error) reject(error);
+              resolve(result);
+            }
+          )
+          .end(buffer);
+      });
+      product.image = (uploadResult as { secure_url: string }).secure_url;
+      await cloudinary.uploader.destroy(product.imagePublicId);
+      product.imagePublicId = (uploadResult as { public_id: string }).public_id;
+    }
+
+    const data = await product.save();
     return NextResponse.json(
-      { success: true, message: "Edit successful", data: updatedProduct },
+      { success: true, message: "Edit successful" },
       { status: 200 }
     );
   } catch (e) {
