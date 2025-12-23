@@ -23,7 +23,7 @@ export default function ProductCard({
 
   return (
     <div className="w-full max-w-sm rounded-2xl shadow-md bg-white overflow-hidden border border-gray-200 hover:shadow-lg transition duration-300">
-      <div className="relative h-60 w-full">
+      <div className="relative w-full h-[200px]">
         <Image
           src={url}
           onError={() => setUrl("/images/ImageNotFound.png")}
@@ -34,7 +34,7 @@ export default function ProductCard({
           className="object-contain hover:scale-105 transition-transform duration-300 pt-4"
         />
       </div>
-      <div className="p-4 flex flex-col justify-between h-full min-h-[280px]">
+      <div className="p-4 flex flex-col justify-between h-full min-h-[250px]">
   <div className="mt-4">
     <h3 className="text-[16px] font-semibold text-gray-800 leading-snug mb-2 line-clamp-4">
       {name}

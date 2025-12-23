@@ -2,6 +2,7 @@ export const dynamic = "force-dynamic";
 
 import NavBar from "@/components/navbar";
 import ProductCard from "@/components/productCard";
+import Pagination from "@/components/ui/Pagination";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/product";
 import Link from "next/link";
@@ -14,6 +15,7 @@ export default async function Home() {
   await connectDB();
   const products = await Product.find({});
   console.log(products[0]?._id);
+
   return (
     <div>
       <NavBar />
@@ -22,7 +24,11 @@ export default async function Home() {
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => {
               return (
-                <Link href={product.productLink} key={product._id} target="_blank">
+                <Link
+                  href={product.productLink}
+                  key={product._id}
+                  target="_blank"
+                >
                   <ProductCard
                     name={product.name}
                     category={product.category}
@@ -32,6 +38,12 @@ export default async function Home() {
                 </Link>
               );
             })}
+          </div>
+          <div>
+            // pagination
+            <div className="flex items-center justify-center gap-1 mt-8">
+              <Pagination />
+            </div>
           </div>
         </div>
       </main>
