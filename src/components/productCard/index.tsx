@@ -16,7 +16,7 @@ export default function ProductCard({
   price,
   imageUrl,
 }: ProductCardProps) {
-  console.log({ imageUrl });
+  // console.log({ imageUrl });
 
   const [url, setUrl]: [string, Dispatch<SetStateAction<string>>] =
     useState(imageUrl);

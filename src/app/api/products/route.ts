@@ -2,6 +2,7 @@ import { NextResponse, NextRequest } from "next/server";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/product";
 import cloudinary from "@/lib/cloudinary";
+import { NextApiRequest } from "next";
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,7 +45,7 @@ export async function POST(req: NextRequest) {
       image: (uploadResult as { secure_url: string }).secure_url,
       imagePublicId: (uploadResult as { public_id: string }).public_id,
     });
-    console.log("created Product",product)
+    console.log("created Product", product);
     return NextResponse.json({ success: true, product }, { status: 201 });
   } catch (error) {
     console.error(error);
@@ -55,10 +56,18 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET() {
+export async function GET(req: NextRequest) {
   try {
+    console.log("api called", req.url);
     await connectDB();
-    const products = await Product.find();
+    const { searchParams } = new URL(req.url!);
+    const page = Number(searchParams.get("page") ?? 1);
+    let limit = Number(searchParams.get("limit") ?? 20);
+    limit = limit > 30 ? 30 : limit;
+    const skip = (page - 1) * limit;
+    console.log("frontend", page);
+    const products = await Product.find().skip(skip).limit(limit).lean();
+    console.log("backend", products);
     return NextResponse.json({ success: true, products }, { status: 200 });
   } catch (error) {
     console.log(error);
