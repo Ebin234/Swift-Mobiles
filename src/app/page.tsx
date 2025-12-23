@@ -10,8 +10,11 @@ import { useEffect, useState } from "react";
 
 export default function Home() {
   const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [products, setProducts] = useState<[IProduct] | []>([]);
+  const [totalPageCount, setTotalPageCount] = useState<number>(0);
+
   useEffect(() => {
     fetchProduct();
   }, [currentPage]);
@@ -19,14 +22,15 @@ export default function Home() {
   const fetchProduct = async () => {
     try {
       const data = await fetch(`${BASE_URL}/products?page=${currentPage}`);
-      const { products } = await data.json();
+      const { products, totalPages } = await data.json();
+ 
+      setTotalPageCount(totalPages);
       setProducts(products);
     } catch (error) {
       console.log(error);
     }
   };
-  // console.log(products);
-
+  
   return (
     <div>
       <NavBar />
@@ -53,7 +57,7 @@ export default function Home() {
 
           {/* PAGINATION */}
           <div className="flex items-center justify-center gap-1 mt-8">
-            <Pagination setCurrentPage={setCurrentPage} />
+            <Pagination totalPageCount={totalPageCount} setCurrentPage={setCurrentPage}  />
           </div>
         </div>
       </main>

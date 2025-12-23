@@ -30,7 +30,7 @@ export default function ProductCard({
           alt={name}
           fill
           unoptimized
-          objectFit="contain"
+          loading="eager"
           className="object-contain hover:scale-105 transition-transform duration-300 pt-4"
         />
       </div>

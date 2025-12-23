@@ -58,17 +58,26 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    console.log("api called", req.url);
     await connectDB();
+
     const { searchParams } = new URL(req.url!);
     const page = Number(searchParams.get("page") ?? 1);
     let limit = Number(searchParams.get("limit") ?? 20);
+
     limit = limit > 30 ? 30 : limit;
     const skip = (page - 1) * limit;
-    console.log("frontend", page);
-    const products = await Product.find().skip(skip).limit(limit).lean();
-    console.log("backend", products);
-    return NextResponse.json({ success: true, products }, { status: 200 });
+
+    const [totalProducts, products] = await Promise.all([
+      Product.countDocuments(),
+      Product.find().skip(skip).limit(limit).lean(),
+    ]);
+
+    const totalPages = Math.ceil(totalProducts / limit);
+
+    return NextResponse.json(
+      { success: true, products, totalPages },
+      { status: 200 }
+    );
   } catch (error) {
     console.log(error);
     return NextResponse.json(

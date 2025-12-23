@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 
 function Pagination({
+  totalPageCount,
   setCurrentPage,
 }: {
+  totalPageCount: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }) {
   const [count, setCount] = useState<number>(0);
@@ -23,7 +25,6 @@ function Pagination({
     }
   };
 
-  console.log({ count, activePage });
   return (
     <>
       <button
@@ -33,24 +34,27 @@ function Pagination({
       >
         ‹‹
       </button>
-      {[...Array(count * 5 + 6).keys()].slice(count * 5 + 1).map((page) => {
-        return (
-          <button
-            onClick={() => {
-              setActivePage(page);
-              setCurrentPage(page);
-            }}
-            key={page}
-            className={`w-9 h-9 rounded-full border text-sm  hover:bg-gray-950 hover:text-white  ${
-              activePage === page ? "bg-gray-950 text-white" : "text-black"
-            }`}
-          >
-            {page}
-          </button>
-        );
-      })}
+      {[...Array(totalPageCount + 1).keys()]
+        .slice(count * 5 + 1)
+        .map((page) => {
+          return (
+            <button
+              onClick={() => {
+                setActivePage(page);
+                setCurrentPage(page);
+              }}
+              key={page}
+              className={`w-9 h-9 rounded-full border text-sm  hover:bg-gray-950 hover:text-white  ${
+                activePage === page ? "bg-gray-950 text-white" : "text-black"
+              }`}
+            >
+              {page}
+            </button>
+          );
+        })}
       <button
         onClick={() => handleNext(true)}
+        disabled={totalPageCount < (count + 1) * 5}
         className="px-3 py-2 rounded-full border text-sm  hover:bg-gray-950 hover:text-white text-black"
       >
         ››
