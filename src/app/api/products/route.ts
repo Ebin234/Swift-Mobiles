@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 export async function GET() {
   try {
     await connectDB();
-    const products = await Product.find({});
+    const products = await Product.find();
     return NextResponse.json({ success: true, products }, { status: 200 });
   } catch (error) {
     console.log(error);
