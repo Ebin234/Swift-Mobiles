@@ -21,7 +21,7 @@ export default function Home() {
 
   const fetchProduct = async () => {
     try {
-      const data = await fetch(`${BASE_URL}/products?page=${currentPage}`);
+      const data = await fetch(`${BASE_URL}/api/products?page=${currentPage}`);
       const { products, totalPages } = await data.json();
  
       setTotalPageCount(totalPages);
