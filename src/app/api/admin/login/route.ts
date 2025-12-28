@@ -1,3 +1,4 @@
+import { generateAccessToken, generateRefreshToken } from "@/lib/jwt";
 import { connectDB } from "@/lib/mongodb";
 import Admin from "@/models/admin";
 import bcrypt from "bcryptjs";
@@ -29,7 +30,30 @@ export async function POST(req: NextRequest) {
         { status: 401 }
       );
     }
-    return NextResponse.json({ success: true, message: "login success" });
+
+    const accessToken = generateAccessToken({
+      id: admin._id,
+      role: admin.role,
+    });
+    const refreshToken = generateRefreshToken({
+      id: admin._id,
+      role: admin.role,
+    });
+
+    console.log({ admin, accessToken, refreshToken });
+    const response = NextResponse.json({
+      success: true,
+      message: "login success",
+      accessToken,
+    });
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+      path: "/",
+    });
+
+    return response;
   } catch (error) {
     console.error(error);
     return NextResponse.json(
