@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+
+  const router = useRouter();
 
   console.log({ email });
   console.log({ password });
@@ -16,10 +19,15 @@ export default function Login() {
     data.append("email", email);
     data.append("password", password);
 
-    const res = await fetch("/api/admin/login", {
+    const res = await fetch("/api/auth/login", {
       method: "POST",
+      credentials: "include",
       body: data,
     });
+    console.log({res})
+    if(res.ok){
+      router.push('/admin')
+    }
   };
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">

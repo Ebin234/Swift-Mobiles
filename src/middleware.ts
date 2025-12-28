@@ -1,19 +1,22 @@
+export const runtime = "nodejs"
+
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken";
+import { verifyAccessToken } from "./lib/jwt";
 
 export function middleware(req: NextRequest) {
-  const authToken = req.headers.get("authorization");
-  if (!authToken) return NextResponse.redirect(new URL("/auth/login", req.url));
+  const token = req.cookies.get("accessToken")?.value;
+  if (!token) return NextResponse.redirect(new URL("/auth/login", req.url));
 
   try {
-    const token = authToken.split(" ")[1];
-    jwt.verify(token, process.env.JWT_ACCESS_SECRET!);
+   const data= verifyAccessToken(token);
+   console.log({data})
     return NextResponse.next();
   } catch (error) {
+    console.log({error})
     return NextResponse.redirect(new URL("/auth/login", req.url));
   }
 }
 
 export const config = {
-    matcher:["/admin/:path*"]
-}
+  matcher: ["/admin/:path*","/api/products/:path*"],
+};

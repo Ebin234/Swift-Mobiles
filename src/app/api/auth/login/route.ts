@@ -44,13 +44,20 @@ export async function POST(req: NextRequest) {
     const response = NextResponse.json({
       success: true,
       message: "login success",
-      accessToken,
+    });
+    response.cookies.set("accessToken", accessToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 60 * 15,
     });
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,
-      secure: true,
+      secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
+      maxAge: 7 * 24 * 60 * 60,
     });
 
     return response;
