@@ -2,6 +2,7 @@ export const runtime = "nodejs"
 
 import { NextRequest, NextResponse } from "next/server";
 import { verifyAccessToken } from "./lib/jwt";
+import Product from "./models/product";
 
 export function middleware(req: NextRequest) {
   const token = req.cookies.get("accessToken")?.value;
@@ -18,5 +19,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*","/api/products/:path*"],
+  matcher: ["/admin/:path*","/api/products/:path+"],
 };

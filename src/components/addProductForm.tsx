@@ -65,7 +65,7 @@ export default function AddProductForm({
       }
 
       const res = await fetch(
-        edit ? `/api/products/edit/${id}` : "/api/products",
+        edit ? `/api/products/edit/${id}` : "/api/products/add-product",
         {
           method: edit ? `PUT` : "POST",
           // headers: { "Content-Type": "application/json" },

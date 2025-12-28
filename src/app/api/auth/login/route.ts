@@ -41,6 +41,10 @@ export async function POST(req: NextRequest) {
     });
 
     console.log({ admin, accessToken, refreshToken });
+
+    admin.refreshToken = refreshToken;
+    await admin.save();
+    
     const response = NextResponse.json({
       success: true,
       message: "login success",
