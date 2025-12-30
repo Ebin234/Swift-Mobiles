@@ -6,11 +6,6 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
   images: {
-    domains: [
-      "m.media-amazon.com",
-      "rukminim1.flixcart.com",
-      "rukminim2.flixcart.com",
-    ],
     remotePatterns: [
       {
         protocol: "https",
