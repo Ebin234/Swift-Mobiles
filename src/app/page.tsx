@@ -9,7 +9,7 @@ import { IProduct } from "@/models/product";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  // const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [products, setProducts] = useState<[IProduct] | []>([]);
@@ -21,7 +21,7 @@ export default function Home() {
 
   const fetchProduct = async () => {
     try {
-      const data = await fetch(`${BASE_URL}/api/products?page=${currentPage}`);
+      const data = await fetch(`/api/user/products?page=${currentPage}`);
       const { products, totalPages } = await data.json();
  
       setTotalPageCount(totalPages);

@@ -9,7 +9,6 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
-    console.log("refresh token route")
     await connectDB();
 
     const refreshToken = req.cookies.get("refreshToken")?.value;
@@ -19,11 +18,9 @@ export async function POST(req: NextRequest) {
 
     const payload: any = verifyRefreshToken(refreshToken);
     const admin = await Admin.findById(payload.id);
-    console.log("refresh admin",admin)
     if (!admin || admin.refreshToken !== refreshToken) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
-    console.log({payload,admin})
 
     const newAccessToken = generateAccessToken({
       id: admin._id,
@@ -44,7 +41,7 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 20,
+      maxAge: 10*60,
     });
 
     response.cookies.set("refreshToken", newRefreshToken, {

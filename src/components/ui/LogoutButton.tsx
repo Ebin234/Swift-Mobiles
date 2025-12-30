@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 function LogoutButton() {
   const router = useRouter();
   const handleLogout = async () => {
-    console.log("logout");
     await fetch("/api/auth/logout", {
       method: "POST",
       credentials: "include",

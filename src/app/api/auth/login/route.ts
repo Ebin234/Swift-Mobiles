@@ -8,12 +8,9 @@ export async function POST(req: NextRequest) {
   try {
     await connectDB();
     const formData = await req.formData();
-    // console.log({ formData });
-    //
 
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
-    // console.log({ email, password });
 
     const admin = await Admin.findOne({ email });
     if (!admin) {
@@ -40,8 +37,6 @@ export async function POST(req: NextRequest) {
       role: admin.role,
     });
 
-    console.log({ admin, accessToken, refreshToken });
-
     admin.refreshToken = refreshToken;
     await admin.save();
     
@@ -54,7 +49,7 @@ export async function POST(req: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "strict",
       path: "/",
-      maxAge: 20,
+      maxAge: 10*60,
     });
     response.cookies.set("refreshToken", refreshToken, {
       httpOnly: true,

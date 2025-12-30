@@ -4,9 +4,9 @@ import {fetchProductById} from "@/lib/actions/fetchProductById.action";
 
 export default async function AddProduct({params}:{params:Promise<{id:string}>}) {
     const {id} = await params;
-    console.log(id);
+    // console.log(id);
     const {jsonData} = await fetchProductById(id);
-    console.log("edit page",jsonData)
+    // console.log("edit page",jsonData)
   return (
     <div className="bg-white h-screen">
       <h1 className="flex justify-center items-center pt-8 pb-8 text-2xl text-black font-semibold">

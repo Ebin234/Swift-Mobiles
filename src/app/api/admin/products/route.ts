@@ -6,7 +6,7 @@ import { getAuthAdmin } from "@/lib/apiAuth";
 export async function GET(req: NextRequest) {
   try {
     const admin = await getAuthAdmin();
-    console.log("editpage admin", admin);
+    // console.log("editpage admin", admin);
     if (!admin) {
       return NextResponse.json({ success: false }, { status: 401 });
     }

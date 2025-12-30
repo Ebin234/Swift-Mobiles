@@ -9,7 +9,7 @@ export async function DELETE(
 ) {
   try {
     const admin = await getAuthAdmin();
-    console.log("delete admin", admin);
+    // console.log("delete admin", admin);
     if (!admin) {
       return NextResponse.json({ success: false }, { status: 401 });
     }

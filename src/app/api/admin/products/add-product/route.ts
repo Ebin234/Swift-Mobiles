@@ -2,23 +2,26 @@ import Product from "@/models/product";
 import { NextRequest, NextResponse } from "next/server";
 import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/mongodb";
+import { getAuthAdmin } from "@/lib/apiAuth";
 
 export async function POST(req: NextRequest) {
   try {
+    const admin = await getAuthAdmin();
+    // console.log("delete admin", admin);
+    if (!admin) {
+      return NextResponse.json({ success: false }, { status: 401 });
+    }
+
     await connectDB();
     const formData = await req.formData();
 
-    console.log({ formData });
+    // console.log({ formData });
 
     const name = formData.get("name") as string;
     const category = formData.get("category") as string;
     const price = formData.get("price") as string;
     const productLink = formData.get("productLink") as string;
     const image = formData.get("image") as File;
-
-    // if(!image) {
-    //   return NextResponse.json({success:false,message:"Image is required"},{status:400});
-    // }
 
     const arrayBuffer = await image.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
@@ -35,7 +38,7 @@ export async function POST(req: NextRequest) {
         .end(buffer);
     });
 
-    console.log({ uploadResult });
+    // console.log({ uploadResult });
     const product = await Product.create({
       name,
       category,
@@ -44,7 +47,7 @@ export async function POST(req: NextRequest) {
       image: (uploadResult as { secure_url: string }).secure_url,
       imagePublicId: (uploadResult as { public_id: string }).public_id,
     });
-    console.log("created Product", product);
+    // console.log("created Product", product);
     return NextResponse.json({ success: true, product }, { status: 201 });
   } catch (error) {
     console.error(error);

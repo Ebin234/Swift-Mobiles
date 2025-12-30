@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { protectedFetch } from "@/lib/protectedFetch";
 
 type ProductCardData = {
   _id: string | null;
@@ -45,7 +46,7 @@ export default function AddProductForm({
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      console.log(e.target.files[0]);
+      // console.log(e.target.files[0]);
       setImageFile(e.target.files[0]);
     }
   };
@@ -64,11 +65,12 @@ export default function AddProductForm({
         data.append("image", imageFile);
       }
 
-      const res = await fetch(
-        edit ? `/api/products/edit/${id}` : "/api/products/add-product",
+      const res = await protectedFetch(
+        edit
+          ? `/api/admin/products/edit-product/${id}`
+          : "/api/admin/products/add-product",
         {
           method: edit ? `PUT` : "POST",
-          // headers: { "Content-Type": "application/json" },
           body: data,
         }
       );
@@ -78,7 +80,6 @@ export default function AddProductForm({
 
       const response = await res.json();
       alert(`✅ Product ${edit ? `edited` : `added`} successfully!`);
-      // console.log(response);
 
       router.push("/admin");
     } catch (err) {
@@ -187,7 +188,7 @@ export default function AddProductForm({
             type="submit"
             className="w-full bg-blue-600 cursor-pointer text-white font-semibold py-2 rounded-md hover:bg-blue-700 transition"
           >
-            {loading ? "Saving..." : "Add Product"}
+            {loading ? "Saving..." : edit ? "Edit Product" : "Add Product"}
           </button>
         </form>
       </div>

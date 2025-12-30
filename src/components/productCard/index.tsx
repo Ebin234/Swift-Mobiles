@@ -1,5 +1,5 @@
 "use client";
-// components/ProductCard.tsx
+
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -16,8 +16,6 @@ export default function ProductCard({
   price,
   imageUrl,
 }: ProductCardProps) {
-  // console.log({ imageUrl });
-
   const [url, setUrl]: [string, Dispatch<SetStateAction<string>>] =
     useState(imageUrl);
 
@@ -35,21 +33,22 @@ export default function ProductCard({
         />
       </div>
       <div className="p-4 flex flex-col justify-between h-full min-h-[250px]">
-  <div className="mt-4">
-    <h3 className="text-[16px] font-semibold text-gray-800 leading-snug mb-2 line-clamp-4">
-      {name}
-    </h3>
-    <h4 className="text-gray-700 text-sm mb-2">
-      Category: <span className="font-medium">{category}</span>
-    </h4>
-    <p className="text-gray-600 text-base font-semibold">₹{price.toFixed(2)}</p>
-  </div>
+        <div className="mt-4">
+          <h3 className="text-[16px] font-semibold text-gray-800 leading-snug mb-2 line-clamp-4">
+            {name}
+          </h3>
+          <h4 className="text-gray-700 text-sm mb-2">
+            Category: <span className="font-medium">{category}</span>
+          </h4>
+          <p className="text-gray-600 text-base font-semibold">
+            ₹{price.toFixed(2)}
+          </p>
+        </div>
 
-  <button className="mt-4 bg-black text-white py-2 rounded-xl hover:bg-gray-800 transition duration-200">
-    Add to Cart
-  </button>
-</div>
-
+        <button className="mt-4 bg-black text-white py-2 rounded-xl hover:bg-gray-800 transition duration-200">
+          Add to Cart
+        </button>
+      </div>
     </div>
   );
 }

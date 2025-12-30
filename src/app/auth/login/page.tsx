@@ -9,9 +9,6 @@ export default function Login() {
 
   const router = useRouter();
 
-  console.log({ email });
-  console.log({ password });
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -24,7 +21,7 @@ export default function Login() {
       credentials: "include",
       body: data,
     });
-    console.log({res})
+
     if(res.ok){
       router.push('/admin')
     }
@@ -39,7 +36,7 @@ export default function Login() {
             Please sign in to your account
           </p>
         </div>
-
+        {/* <p className="bg-red-100 text-red-600 p-2 rounded mb-4 text-sm">paste error message</p> */}
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div>

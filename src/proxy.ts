@@ -5,7 +5,6 @@ import { NextRequest, NextResponse } from "next/server";
 export default function proxy(req: NextRequest) {
   const refreshToken = req.cookies.get("refreshToken")?.value;
   const { pathname } = req.nextUrl;
-  console.log({pathname})
 
   if (
     refreshToken &&
@@ -22,5 +21,5 @@ export default function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/:path*","/auth/:path*"],
+  matcher: ["/admin/:path*", "/auth/:path*"],
 };
