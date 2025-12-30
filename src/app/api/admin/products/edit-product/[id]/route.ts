@@ -1,3 +1,4 @@
+import { getAuthAdmin } from "@/lib/apiAuth";
 import cloudinary from "@/lib/cloudinary";
 import { connectDB } from "@/lib/mongodb";
 import Product from "@/models/product";
@@ -8,6 +9,12 @@ export async function PUT(
   { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const admin = await getAuthAdmin();
+    console.log("editpage admin", admin);
+    if (!admin) {
+      return NextResponse.json({ success: false }, { status: 401 });
+    }
+
     await connectDB();
     const { id } = await params;
     if (!id) {
@@ -60,7 +67,7 @@ export async function PUT(
       { status: 200 }
     );
   } catch (e) {
-    console.error("Error deleting product:", e);
+    console.error("Error:", e);
     return NextResponse.json(
       { success: false, message: "Internal Server Error" },
       { status: 500 }
