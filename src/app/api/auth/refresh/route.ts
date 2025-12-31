@@ -19,7 +19,9 @@ export async function POST(req: NextRequest) {
     const payload: any = verifyRefreshToken(refreshToken);
     const admin = await Admin.findById(payload.id);
     if (!admin || admin.refreshToken !== refreshToken) {
-      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+      const response = NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+      response.cookies.delete("refreshToken");
+      return response;
     }
 
     const newAccessToken = generateAccessToken({

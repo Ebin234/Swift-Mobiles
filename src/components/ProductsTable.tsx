@@ -25,7 +25,7 @@ function ProductsTable() {
         `/api/admin/products?page=${currentPage}`
       );
       const { products, totalPages } = await data.json();
-
+      console.log({totalPageCount});
       setTotalPageCount(totalPages);
       setProducts(products);
     } catch (error) {

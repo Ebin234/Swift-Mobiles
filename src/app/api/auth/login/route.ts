@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
       role: admin.role,
     });
 
+    console.log({refreshToken})
     admin.refreshToken = refreshToken;
     await admin.save();
     

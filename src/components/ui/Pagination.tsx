@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 function Pagination({
-  totalPageCount,
+  totalPageCount=0,
   setCurrentPage,
 }: {
   totalPageCount: number;
@@ -34,7 +34,7 @@ function Pagination({
       >
         ‹‹
       </button>
-      {[...Array(totalPageCount + 1).keys()]
+      {[...Array((totalPageCount + 1)).keys()]
         .slice(count * 5 + 1)
         .map((page) => {
           return (

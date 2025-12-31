@@ -7,20 +7,21 @@ export async function protectedFetch(
     ...init,
     credentials: "include", // IMPORTANT
   });
-  console.log({response})
+  // console.log({response})
 
   // 2. If access token expired
   if (response.status === 401) {
-    console.log("protected Fetch")
     // Try refresh
     const refreshRes = await fetch("/api/auth/refresh", {
       method: "POST",
       credentials: "include",
     });
+    // console.log("refreshresponse",refreshRes)
 
     // 3. If refresh fails → logout
     if (!refreshRes.ok) {
         console.log("function called")
+        
       window.location.href = "/auth/login";
       return response;
     }
