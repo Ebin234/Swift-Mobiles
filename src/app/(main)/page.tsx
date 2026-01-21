@@ -1,7 +1,6 @@
 "use client";
 // export const dynamic = "force-dynamic";
 
-import NavBar from "@/components/navbar";
 import ProductCard from "@/components/productCard";
 import Pagination from "@/components/ui/Pagination";
 import Link from "next/link";
@@ -33,7 +32,6 @@ export default function Home() {
   
   return (
     <div>
-      <NavBar />
       <main className="min-h-screen bg-gray-50 p-6">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
